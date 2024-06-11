@@ -8,8 +8,8 @@ library(deSolve)
 Treatment_Resistance_Model_w_ITNs <- function(a,b,m,w,e,s,o,l,d,z,t,i){
   require(deSolve)
   init <- c(S=1-1e-6, I=1e-6, Z=0, R=0, X=1-1e-6, Y=1e-6)
-  parameters <- c(alpha=a,beta=b,mu=m,delta=d,lambda=l,epsilon=e,sigma=s,omega=o,tau=w,zeta=z,omicron=i) #parameters in differential equation
-  time <- seq(0,t,by=t/(2*length(1:t))) #time sequence for  solution
+  parameters <- c(alpha=a,beta=b,mu=m,delta=d,lambda=l,epsilon=e,sigma=s,omega=o,tau=w,zeta=z,omicron=i)
+  time <- seq(0,t,by=t/(2*length(1:t)))
   eqn <- function(time, state, parameters) {
   
     S <- state[1]
@@ -20,7 +20,7 @@ Treatment_Resistance_Model_w_ITNs <- function(a,b,m,w,e,s,o,l,d,z,t,i){
     Y <- state[6]
 
     
-    with(as.list(c(parameters)), { #Here are the differential equations describing the compartment model
+    with(as.list(c(parameters)), { 
       dS <- mu*(S+I+Z+R) - ((omicron*beta*S*Y)/(X+Y)) - mu*S + tau*R
       dI <- ((omicron*beta*S*Y)/(X+Y)) + epsilon*Z - lambda*I - mu*I - sigma*I
       dZ <- sigma*I - epsilon*Z - mu*Z - alpha*Z
@@ -32,22 +32,22 @@ Treatment_Resistance_Model_w_ITNs <- function(a,b,m,w,e,s,o,l,d,z,t,i){
       return(list(c(dS, dI, dZ, dR, dX, dY)))
     })
   }
-  out<-ode(y=init,times=time,eqn,parms=parameters) #solve the differential equation
+  out<-ode(y=init,times=time,eqn,parms=parameters) 
   out.df<-as.data.frame(out) #create a data frame 
-  print(tail(out.df))#prints the last 5 data points of the output, returning the population at the end of the run
+  print(tail(out.df))
   require(ggplot2) 
-  title <- bquote("Coartem as Malaria Treatment in Kenya") #title
+  title <- bquote("Coartem as Malaria Treatment in Kenya") 
   subtit<-bquote(list(alpha==.(a),beta==.(b),delta==.(d),lambda==.(l),tau==.(w),zeta==.(z),epsilon==.(e),omega==.(o),mu==.(m),sigma==.(s),omicron==.(i)))
-  res<-ggplot(out.df,aes(x=time))+ #set plot  data frame output and x-variable as time
+  res<-ggplot(out.df,aes(x=time))+ 
     ggtitle(bquote(atop(bold(.(title)),atop(bold(.(subtit))))))+ 
-    geom_line(aes(y=S,colour="Susceptible"))+ #assign plot line as S from out.df
-    geom_line(aes(y=I,colour="Infected"))+ #assign plot line as I from out.df
+    geom_line(aes(y=S,colour="Susceptible"))+
+    geom_line(aes(y=I,colour="Infected"))+ 
     geom_line(aes(y=Z,colour="Treated"))+
     geom_line(aes(y=R,colour="Recovered"))+
     geom_line(aes(y=X,colour="Susceptible Mosquitoes"))+
-    geom_line(aes(y=Y,colour="Infected Mosquitoes"))+ #assign plot line as S from out.df
+    geom_line(aes(y=Y,colour="Infected Mosquitoes"))+ # hash out the X and Y lines if you only want the human compartments on the graph.
 
-    ylim(0,1)+#assign plot line as R from out.df
+    ylim(0,1)+
     xlim(0,t)+
     ylab(label="Proportion")+ #y-axis label
     xlab(label="Time (days)")+ #x-axis label 
