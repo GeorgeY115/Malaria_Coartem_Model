@@ -5,7 +5,7 @@ install.packages('ggplot')
 library(ggplot)
 library(deSolve)
 
-Treatment_Resistance_Model_w_ITNs <- function(a,b,m,w,e,s,o,l,d,z,t,i){
+Coartem_with_Malaria <- function(a,b,m,w,e,s,o,l,d,z,t,i){
   require(deSolve)
   init <- c(S=1-1e-6, I=1e-6, Z=0, R=0, X=1-1e-6, Y=1e-6)
   parameters <- c(alpha=a,beta=b,mu=m,delta=d,lambda=l,epsilon=e,sigma=s,omega=o,tau=w,zeta=z,omicron=i)
@@ -57,7 +57,7 @@ Treatment_Resistance_Model_w_ITNs <- function(a,b,m,w,e,s,o,l,d,z,t,i){
 print(res) #print  plot
 }
 
-Treatment_Resistance_Model_w_ITNs(t=250, a=0.225, b=0.6, m=0.0005, l=0.009, w=0.002, e=0.009, s=0.128, d=0.05, o=0.6, z=0.05, i=10)
+Coartem_with_Malaria(t=250, a=0.225, b=0.6, m=0.0005, l=0.009, w=0.002, e=0.009, s=0.128, d=0.05, o=0.6, z=0.05, i=10)
 
 #PARAMETER SOURCES:
   # a (treatment success) = 0.225 -> effectiveness for coartem estimated to be around 99%,
