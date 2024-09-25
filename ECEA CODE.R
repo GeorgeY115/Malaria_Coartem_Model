@@ -5,7 +5,9 @@
 ## population divided into wealth quintiles. It allows for the implementation of
 ## a vaccine for which there is assumed life-long immunity.
 
-## Read in data.
+## Read in data, which consists of, for each quintile, 5-year age groups, proportion
+## of population in each age group, incidence, case fatality ratios, and the cost per
+## case of treatment.
 x <- read.csv("Model Test Data.csv")
 
 
