@@ -24,7 +24,7 @@ vaccine_impact <- vaccine_efficacy*vaccine_coverage
 
 
 ## Establish life expectancy.
-life_expectancy <- 90
+life_expectancy <- 70
 
 
 ## Establish the time frame (in years) over which the model will run.
@@ -120,9 +120,11 @@ for (q in qunique){
       
       
       ## Calculate DALYs, encorporating the discount rate of the current time step.
-      dalys <- (cases * disweight + cases * (life_expectancy-subq$avage[i]))*discount
+      ## The life expectancy - death age is limited so it can only be above 0.
+      dalys <- (cases * disweight + deaths * pmax(0,life_expectancy-subq$avage[i]))*discount
       dalyspostvax <- (casespostvax * disweight + casespostvax * (life_expectancy-subq$avage[i]))*discount
-    
+      print(dalys)
+      
       ## Keep a counter for each inner loop iteration for totals.
       total_cases <- total_cases + cases
       total_deaths <- total_deaths + deaths
@@ -166,5 +168,4 @@ outputtab <- cbind(outputtab,impact)
 
 ## Display the results.
 outputtab
-
 
